@@ -62,6 +62,12 @@ export function UserManagement() {
     setSubmittedUsers((prev) => prev.filter((user) => user.id !== userId));
   }, []);
 
+  const handleRoleChange = useCallback((userId: string, role: SubmittedUser["role"]) => {
+    setSubmittedUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, role } : u))
+    );
+  }, []);
+
   const handleSubmit = useCallback((emails: string[]) => {
     const newUsers = createUsersFromEmails(emails);
     setSubmittedUsers((prev) => [...newUsers, ...prev]);
@@ -77,7 +83,12 @@ export function UserManagement() {
       />
 
       <div className="bg-white rounded-xl shadow-sm border border-[#D6D8DD94] overflow-visible">
-        <UserTable users={submittedUsers} onRemove={handleRemoveUser} />
+        <UserTable
+          users={submittedUsers}
+          onRemove={handleRemoveUser}
+          onRoleChange={handleRoleChange}
+          pageSize={10}
+        />
 
         <div className="p-4 border-t border-[#D6D8DD94] border-b-0 rounded-b-xl">
           <InviteUsersInput

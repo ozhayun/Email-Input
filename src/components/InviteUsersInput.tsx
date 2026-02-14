@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useRef, KeyboardEvent, useEffect } from 'react';
-import { Mail, UserPlus, X } from 'lucide-react';
-import { toast } from 'sonner';
-import { EmailPopover } from './EmailPopover';
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
+import { toast } from "sonner";
+import { EmailPopover } from "./EmailPopover";
+import { EmailChip } from "./EmailChip";
 
-import { EmailChipData } from '@/types/user';
+import { EmailChipData } from "@/types/user";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -17,30 +17,30 @@ interface InviteUsersInputProps {
   existingEmails?: string[];
 }
 
-export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({ 
+export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
   initialEmails = [],
   onChange,
   onSubmit,
   maxVisibleChips = 5,
-  existingEmails = []
+  existingEmails = [],
 }) => {
-  const [emails, setEmails] = useState<EmailChipData[]>(() => 
-    initialEmails.map(email => ({
+  const [emails, setEmails] = useState<EmailChipData[]>(() =>
+    initialEmails.map((email) => ({
       email: email.toLowerCase().trim(),
-      isValid: EMAIL_REGEX.test(email.trim())
-    }))
+      isValid: EMAIL_REGEX.test(email.trim()),
+    })),
   );
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [duplicateAttempt, setDuplicateAttempt] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
 
   // Notify parent of changes
   useEffect(() => {
     if (onChange) {
-      const validEmails = emails.filter(e => e.isValid).map(e => e.email);
+      const validEmails = emails.filter((e) => e.isValid).map((e) => e.email);
       onChange(validEmails);
     }
   }, [emails, onChange]);
@@ -51,13 +51,13 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
 
   const addEmail = (email: string) => {
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     if (!trimmedEmail) return;
 
     // Check for duplicates
-    const isDuplicateInInput = emails.some(e => e.email === trimmedEmail);
+    const isDuplicateInInput = emails.some((e) => e.email === trimmedEmail);
     const isAlreadyInvited = existingEmails.includes(trimmedEmail);
-    
+
     if (isDuplicateInInput || isAlreadyInvited) {
       if (isAlreadyInvited) {
         toast.error("User already invited");
@@ -77,25 +77,25 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
       return;
     }
 
-    setEmails(prev => [...prev, { email: trimmedEmail, isValid: true }]);
-    setInputValue('');
+    setEmails((prev) => [...prev, { email: trimmedEmail, isValid: true }]);
+    setInputValue("");
   };
 
   const removeEmail = (emailToRemove: string) => {
-    setEmails(prev => prev.filter(e => e.email !== emailToRemove));
+    setEmails((prev) => prev.filter((e) => e.email !== emailToRemove));
   };
 
   const removeLastEmail = () => {
     if (emails.length > 0) {
-      setEmails(prev => prev.slice(0, -1));
+      setEmails((prev) => prev.slice(0, -1));
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === "," || e.key === " ") {
       e.preventDefault();
       addEmail(inputValue);
-    } else if (e.key === 'Backspace' && inputValue === '') {
+    } else if (e.key === "Backspace" && inputValue === "") {
       removeLastEmail();
     }
   };
@@ -104,7 +104,7 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
     // Check pending input
     if (inputValue.trim()) {
       const email = inputValue.trim().toLowerCase();
-      
+
       if (!validateEmail(email)) {
         toast.error("Please enter a valid email address");
         setDuplicateAttempt(true);
@@ -119,51 +119,55 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
         setTimeout(() => setDuplicateAttempt(false), 500);
         return; // Block submission
       }
-      
+
       // If valid and not duplicate, add to list for submission
-      if (!emails.some(e => e.email === email)) {
+      if (!emails.some((e) => e.email === email)) {
         const finalEmails = [...emails, { email, isValid: true }];
-        onSubmit(finalEmails.map(e => e.email));
+        onSubmit(finalEmails.map((e) => e.email));
         setEmails([]);
-        setInputValue('');
-        toast.success(`Sent invites to ${finalEmails.length} user${finalEmails.length > 1 ? 's' : ''}`);
+        setInputValue("");
+        toast.success(
+          `Sent invites to ${finalEmails.length} user${finalEmails.length > 1 ? "s" : ""}`,
+        );
         return;
       } else {
         // If duplicate, just clear input and proceed to submit existing emails
-        setInputValue('');
+        setInputValue("");
       }
     }
 
     // If no pending input or pending input was duplicate (and ignored)
     if (emails.length > 0) {
-      onSubmit(emails.map(e => e.email));
+      onSubmit(emails.map((e) => e.email));
       setEmails([]);
-      setInputValue('');
-      toast.success(`Sent invites to ${emails.length} user${emails.length > 1 ? 's' : ''}`);
+      setInputValue("");
+      toast.success(
+        `Sent invites to ${emails.length} user${emails.length > 1 ? "s" : ""}`,
+      );
     }
   };
 
   const visibleEmails = emails.slice(0, maxVisibleChips);
   const hiddenEmails = emails.slice(maxVisibleChips);
   const hasHiddenEmails = hiddenEmails.length > 0;
-  const validEmailCount = emails.filter(e => e.isValid).length;
+  const validEmailCount = emails.filter((e) => e.isValid).length;
 
   return (
     <div className="w-full">
       <div className="mb-4">
         <div className="flex items-start gap-4 w-full">
-          <div 
+          <div
             className={`
               flex-1 flex flex-wrap items-center gap-2 p-2 min-h-[40px]
               border rounded-lg bg-white
               focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
               transition-all duration-200 cursor-text
-              ${duplicateAttempt ? 'border-orange-400 bg-orange-50' : 'border-gray-200'}
+              ${duplicateAttempt ? "border-orange-400 bg-orange-50" : "border-gray-200"}
             `}
-            style={{ boxShadow: '0px 1px 2px 0px #1018280D' }}
+            style={{ boxShadow: "0px 1px 2px 0px #1018280D" }}
             onClick={() => inputRef.current?.focus()}
           >
-            {visibleEmails.map((emailData, index) => (
+            {visibleEmails.map((emailData) => (
               <EmailChip
                 key={emailData.email}
                 emailData={emailData}
@@ -179,8 +183,8 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
                     e.stopPropagation();
                     setShowPopover(!showPopover);
                   }}
-                  className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium
-                    bg-gray-100 text-gray-600 hover:bg-gray-200
+                  className="inline-flex items-center px-2 py-0.5 rounded-md text-sm font-medium
+                    bg-[#ECF1FC] text-[#253047] hover:bg-[#d6e1f9]
                     transition-colors duration-200"
                 >
                   +{hiddenEmails.length}
@@ -207,7 +211,7 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={emails.length === 0 ? "Enter emails..." : ""}
-              className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
+              className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-[#253047] placeholder-[#667085]"
               aria-label="Email input field"
             />
           </div>
@@ -218,55 +222,17 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
             className={`
               px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
               transition-colors duration-200 h-[40px]
-              ${validEmailCount > 0
-                ? 'bg-[#1852E7] text-white hover:bg-blue-700 border border-[#336CFF]'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              ${
+                validEmailCount > 0
+                  ? "bg-[#1852E7] text-white hover:bg-[#164bc7] border border-[#336CFF] shadow-[0px_1px_2px_0px_#1018280D,0px_-2px_4px_0px_#0638BA_inset,0px_2px_3.4px_0px_#FBFBFB4D_inset]"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }
             `}
-            style={validEmailCount > 0 ? {
-              boxShadow: '0px 1px 2px 0px #1018280D, 0px -2px 4px 0px #0638BA inset, 0px 2px 3.4px 0px #FBFBFB4D inset'
-            } : undefined}
           >
             Add Users ({validEmailCount})
           </button>
         </div>
-        
-        <p className="mt-2 text-xs text-gray-400 ml-1">
-          Press <kbd className="font-sans">Enter</kbd> or <kbd className="font-sans">Space</kbd> to add
-        </p>
       </div>
-    </div>
-  );
-};
-
-// EmailChip Component
-interface EmailChipProps {
-  emailData: EmailChipData;
-  onRemove: (email: string) => void;
-}
-
-const EmailChip: React.FC<EmailChipProps> = ({ emailData, onRemove }) => {
-  const { email, isValid } = emailData;
-
-  return (
-    <div
-      className={`
-        inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md text-sm
-        transition-colors duration-200
-        ${isValid 
-          ? 'bg-[#ECF1FC] text-gray-700' 
-          : 'bg-red-50 text-red-700 border border-red-200'
-        }
-      `}
-    >
-      <span className="max-w-[200px] truncate">{email}</span>
-      <button
-        onClick={() => onRemove(email)}
-        className="text-gray-400 hover:text-gray-600 rounded p-0.5 transition-colors"
-        aria-label={`Remove ${email}`}
-      >
-        <X size={14} />
-      </button>
     </div>
   );
 };
