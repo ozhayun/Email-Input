@@ -1,14 +1,11 @@
-const INVITE_DELAY_MS = 1500;
+const INVITE_DELAY_MS = 2000;
 
 /**
- * Dummy invite API: logs emails to console and simulates network delay.
- * Use for development / task: "On submit log to console or run dummy API call with the list of emails".
+ * Dummy invite API: simulates network delay, then logs the final list of emails.
+ * Requirement: "On submit log to console or run dummy API call with the list of emails".
+ * Final list is logged only after the delay.
  */
 export async function submitInviteEmails(emails: string[]): Promise<void> {
-  console.log("[Invite] Submitting emails:", emails);
-
-  // Simulate API call delay (1–2 secs)
   await new Promise((resolve) => setTimeout(resolve, INVITE_DELAY_MS));
-
-  console.log("[Invite] Done (dummy). Emails would be sent to:", emails);
+  console.log("[Invite] Final list of emails (after delay):", emails);
 }

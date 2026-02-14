@@ -152,7 +152,7 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
   return (
     <div className="w-full">
       <div className="mb-4">
-        <div className="flex items-start gap-4 w-full">
+        <div className="flex items-center gap-4 w-full">
           <div
             className={`
               flex-1 flex flex-wrap items-center gap-2 p-2 min-h-[40px]
@@ -187,16 +187,13 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
                   +{hiddenEmails.length}
                 </button>
 
-                {showPopover && (
-                  <div className="absolute bottom-full left-0 mb-2 w-64 z-50">
-                    <EmailPopover
-                      emails={hiddenEmails}
-                      onRemove={removeEmail}
-                      onClose={() => setShowPopover(false)}
-                      triggerRef={moreButtonRef}
-                    />
-                  </div>
-                )}
+                <EmailPopover
+                  isOpen={showPopover}
+                  emails={hiddenEmails}
+                  onRemove={removeEmail}
+                  onClose={() => setShowPopover(false)}
+                  triggerRef={moreButtonRef}
+                />
               </div>
             )}
 
@@ -217,9 +214,11 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
             type="button"
             onClick={handleSubmit}
             disabled={validEmailCount === 0 || isSubmitting}
+            aria-busy={isSubmitting}
+            aria-disabled={validEmailCount === 0 || isSubmitting}
             className={`
               inline-flex items-center justify-center gap-2 px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
-              transition-colors duration-200 h-[40px]
+              transition-colors duration-200 h-[40px] min-w-[120px]
               ${
                 validEmailCount > 0 && !isSubmitting
                   ? "bg-[#1852E7] text-white hover:bg-[#164bc7] border border-[#336CFF] shadow-[0px_1px_2px_0px_#1018280D,0px_-2px_4px_0px_#0638BA_inset,0px_2px_3.4px_0px_#FBFBFB4D_inset]"
@@ -232,8 +231,10 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
                 <Loader2 size={18} className="animate-spin" />
                 Adding…
               </>
-            ) : (
+            ) : validEmailCount > 0 ? (
               `Add Users (${validEmailCount})`
+            ) : (
+              `Add Users`
             )}
           </button>
         </div>
