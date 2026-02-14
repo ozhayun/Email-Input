@@ -5,12 +5,9 @@ import { Mail, UserPlus, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { EmailPopover } from './EmailPopover';
 
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+import { EmailChipData } from '@/types/user';
 
-interface EmailChipData {
-  email: string;
-  isValid: boolean;
-}
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 interface InviteUsersInputProps {
   initialEmails?: string[];

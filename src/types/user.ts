@@ -1,11 +1,12 @@
-export interface User {
+export interface SubmittedUser {
     id: string;
-    name: string;
     email: string;
+    name: string;
+    role: 'Admin' | 'Guest' | 'Editor' | 'Viewer';
     status: 'Active' | 'Inactive' | 'Pending';
     addedOn: string;
-    role: 'Admin' | 'Editor' | 'Viewer' | 'Guest';
-    avatar: string;
+    initials: string;
+    gradient: string;
 }
 
 export interface EmailChipData {

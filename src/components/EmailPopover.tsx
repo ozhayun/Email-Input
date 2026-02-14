@@ -1,13 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
-
-interface EmailChipData {
-  email: string;
-  isValid: boolean;
-}
+import { EmailChipData } from '@/types/user';
 
 interface EmailPopoverProps {
   emails: EmailChipData[];
@@ -26,11 +21,14 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Type assertion needed for event.target
+      const target = event.target as Node;
+      
       if (
         popoverRef.current && 
-        !popoverRef.current.contains(event.target as Node) &&
+        !popoverRef.current.contains(target) &&
         triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
+        !triggerRef.current.contains(target)
       ) {
         onClose();
       }
@@ -52,43 +50,34 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
   }, [onClose, triggerRef]);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        ref={popoverRef}
-        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-        className="absolute z-50 mt-2 w-80 max-h-64 overflow-y-auto bg-white rounded-lg shadow-xl border border-gray-200 p-4"
-        style={{
-          top: '100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      >
-        <div className="flex flex-col gap-2">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">All Email Addresses</h3>
-          <div className="flex flex-wrap gap-2">
-            {emails.map((emailData, index) => (
-              <PopoverEmailChip
-                key={emailData.email}
-                emailData={emailData}
-                onRemove={onRemove}
-                index={index}
-              />
-            ))}
-          </div>
+    <div
+      ref={popoverRef}
+      className="absolute z-50 mt-2 w-72 max-h-64 overflow-y-auto bg-white rounded-lg shadow-xl border border-gray-200 p-3 animate-in fade-in zoom-in-95 duration-100"
+      style={{
+        bottom: '100%',
+        marginBottom: '0.5rem',
+        left: '0',
+      }}
+    >
+      <div className="flex flex-col gap-2">
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Hidden Emails</h3>
+        <div className="flex flex-wrap gap-1.5">
+          {emails.map((emailData, index) => (
+            <PopoverEmailChip
+              key={emailData.email}
+              emailData={emailData}
+              onRemove={onRemove}
+            />
+          ))}
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </div>
   );
 };
 
-// Inline EmailChip for popover (no animations needed here)
 interface EmailChipProps {
   emailData: EmailChipData;
   onRemove: (email: string) => void;
-  index: number;
 }
 
 const PopoverEmailChip: React.FC<EmailChipProps> = ({ emailData, onRemove }) => {
@@ -97,21 +86,21 @@ const PopoverEmailChip: React.FC<EmailChipProps> = ({ emailData, onRemove }) => 
   return (
     <div
       className={`
-        inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
-        transition-all duration-200
+        inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md text-xs font-medium
+        transition-colors duration-200
         ${isValid 
-          ? 'bg-blue-100 text-blue-700 border border-blue-200 hover:bg-blue-200' 
-          : 'bg-red-100 text-red-700 border border-red-300 hover:bg-red-200'
+          ? 'bg-gray-100 text-gray-700' 
+          : 'bg-red-50 text-red-700 border border-red-200'
         }
       `}
     >
-      <span className="max-w-[200px] truncate">{email}</span>
+      <span className="max-w-[180px] truncate">{email}</span>
       <button
         onClick={() => onRemove(email)}
-        className="hover:bg-white/50 rounded-full p-0.5 transition-colors"
+        className="text-gray-400 hover:text-gray-600 rounded p-0.5 transition-colors"
         aria-label={`Remove ${email}`}
       >
-        <X size={14} />
+        <X size={12} />
       </button>
     </div>
   );
