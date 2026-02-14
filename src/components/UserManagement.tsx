@@ -24,28 +24,29 @@ const INITIAL_USERS: SubmittedUser[] = (
   gradient: GRADIENTS[index % GRADIENTS.length],
 }));
 
-function getInitialUsers(): SubmittedUser[] {
-  if (typeof window === "undefined") return INITIAL_USERS;
-  try {
-    const saved = localStorage.getItem("submittedUsers");
-    if (saved) {
-      const parsed = JSON.parse(saved) as SubmittedUser[];
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch (e) {
-    console.error("Failed to parse users from localStorage", e);
-  }
-  return INITIAL_USERS;
-}
-
 const PAGE_SIZE = 10;
 
 export function UserManagement() {
   const [activeTab, setActiveTab] = useState("Users");
   const [submittedUsers, setSubmittedUsers] =
-    useState<SubmittedUser[]>(getInitialUsers);
+    useState<SubmittedUser[]>(INITIAL_USERS);
   const [tablePage, setTablePage] = useState(1);
   const [isAddingUsers, setIsAddingUsers] = useState(false);
+
+  // Load from localStorage after mount (client-only). Same initial state on server and client avoids hydration mismatch.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("submittedUsers");
+      if (saved) {
+        const parsed = JSON.parse(saved) as SubmittedUser[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setSubmittedUsers(parsed);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse users from localStorage", e);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("submittedUsers", JSON.stringify(submittedUsers));

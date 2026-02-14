@@ -19,19 +19,19 @@ export function UserTableRow({
 }: UserTableRowProps) {
   return (
     <tr key={user.id} className="hover:bg-gray-50 transition-colors group">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center gap-3">
+      <td className="px-6 py-4 whitespace-nowrap max-w-[200px]">
+        <div className="flex items-center gap-3 min-w-0">
           <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm bg-gradient-to-br ${user.gradient}`}
+            className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm bg-gradient-to-br ${user.gradient}`}
           >
             {user.initials}
           </div>
-          <span className="text-sm font-medium text-[#253047]">
+          <span className="text-sm font-medium text-[#253047] truncate block min-w-0" title={user.name}>
             {user.name}
           </span>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2B303D] max-w-[250px]">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2B303D] max-w-[220px]">
         <span className="block truncate" title={user.email}>
           {user.email}
         </span>
@@ -52,10 +52,10 @@ export function UserTableRow({
       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2B303D]">
         {formatAddedOn(user.addedOn)}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="relative">
+      <td className="px-6 py-4 whitespace-nowrap w-[140px] min-w-[140px]">
+        <div className="relative w-full min-w-[120px]">
           <select
-            className="appearance-none bg-white border border-[#D0D5DD] text-[#2B303D] py-1.5 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm"
+            className="appearance-none bg-white border border-[#D0D5DD] text-[#2B303D] py-1.5 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm w-full min-w-[100px]"
             value={user.role}
             onChange={(e) =>
               onRoleChange?.(user.id, e.target.value as SubmittedUser["role"])
@@ -69,7 +69,7 @@ export function UserTableRow({
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-[#2B303D]">
             <svg
-              className="fill-current h-4 w-4"
+              className="fill-current h-4 w-4 shrink-0"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
