@@ -17,7 +17,7 @@ const popoverTransition = {
   initial: { opacity: 0, scale: 0.96, y: 4 },
   animate: { opacity: 1, scale: 1, y: 0 },
   exit: { opacity: 0, scale: 0.96, y: 4 },
-  transition: { duration: 0.15, ease: "easeOut" },
+  transition: { duration: 0.15, ease: [0, 0, 0.2, 1] as const },
 };
 
 export const EmailPopover: React.FC<EmailPopoverProps> = ({
@@ -28,6 +28,12 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
   triggerRef,
 }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen && emails.length === 0) {
+      onClose();
+    }
+  }, [isOpen, emails.length, onClose]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,7 +66,7 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && emails.length > 0 && (
         <motion.div
           ref={popoverRef}
           initial={popoverTransition.initial}
@@ -76,16 +82,14 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
               "0px 4px 6px -1px rgba(0,0,0,0.08), 0px 2px 4px -2px rgba(0,0,0,0.05)",
           }}
         >
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-wrap gap-1.5">
-              {emails.map((emailData) => (
-                <EmailChip
-                  key={emailData.email}
-                  emailData={emailData}
-                  onRemove={onRemove}
-                />
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-1.5">
+            {emails.map((emailData) => (
+              <EmailChip
+                key={emailData.email}
+                emailData={emailData}
+                onRemove={onRemove}
+              />
+            ))}
           </div>
         </motion.div>
       )}
