@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { EmailPopover } from "./EmailPopover";
 import { EmailChip } from "./EmailChip";
@@ -12,9 +13,10 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 interface InviteUsersInputProps {
   initialEmails?: string[];
   onChange?: (emails: string[]) => void;
-  onSubmit: (emails: string[]) => void;
+  onSubmit: (emails: string[]) => void | Promise<void>;
   maxVisibleChips?: number;
   existingEmails?: string[];
+  isSubmitting?: boolean;
 }
 
 export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
@@ -23,6 +25,7 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
   onSubmit,
   maxVisibleChips = 5,
   existingEmails = [],
+  isSubmitting = false,
 }) => {
   const [emails, setEmails] = useState<EmailChipData[]>(() =>
     initialEmails.map((email) => ({
@@ -97,7 +100,7 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (inputValue.trim()) {
       const email = inputValue.trim().toLowerCase();
 
@@ -117,7 +120,8 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
 
       if (!emails.some((e) => e.email === email)) {
         const finalEmails = [...emails, { email, isValid: true }];
-        onSubmit(finalEmails.map((e) => e.email));
+        const toSubmit = finalEmails.map((e) => e.email);
+        await Promise.resolve(onSubmit(toSubmit));
         setEmails([]);
         setInputValue("");
         toast.success(
@@ -130,7 +134,8 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
     }
 
     if (emails.length > 0) {
-      onSubmit(emails.map((e) => e.email));
+      const toSubmit = emails.map((e) => e.email);
+      await Promise.resolve(onSubmit(toSubmit));
       setEmails([]);
       setInputValue("");
       toast.success(
@@ -209,19 +214,27 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={handleSubmit}
-            disabled={validEmailCount === 0}
+            disabled={validEmailCount === 0 || isSubmitting}
             className={`
-              px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
+              inline-flex items-center justify-center gap-2 px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
               transition-colors duration-200 h-[40px]
               ${
-                validEmailCount > 0
+                validEmailCount > 0 && !isSubmitting
                   ? "bg-[#1852E7] text-white hover:bg-[#164bc7] border border-[#336CFF] shadow-[0px_1px_2px_0px_#1018280D,0px_-2px_4px_0px_#0638BA_inset,0px_2px_3.4px_0px_#FBFBFB4D_inset]"
                   : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }
             `}
           >
-            Add Users ({validEmailCount})
+            {isSubmitting ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                Adding…
+              </>
+            ) : (
+              `Add Users (${validEmailCount})`
+            )}
           </button>
         </div>
       </div>

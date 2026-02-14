@@ -18,10 +18,7 @@ export function UserTableRow({
   onRoleChange,
 }: UserTableRowProps) {
   return (
-    <tr
-      key={user.id}
-      className="hover:bg-gray-50 transition-colors group"
-    >
+    <tr key={user.id} className="hover:bg-gray-50 transition-colors group">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center gap-3">
           <div
@@ -29,7 +26,9 @@ export function UserTableRow({
           >
             {user.initials}
           </div>
-          <span className="text-sm font-medium text-[#253047]">{user.name}</span>
+          <span className="text-sm font-medium text-[#253047]">
+            {user.name}
+          </span>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2B303D] max-w-[250px]">

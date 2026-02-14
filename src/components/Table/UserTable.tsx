@@ -31,10 +31,7 @@ export function UserTable({
         <tbody className="divide-y divide-gray-100 bg-white">
           {pageUsers.length === 0 ? (
             <tr>
-              <td
-                colSpan={6}
-                className="px-6 py-12 text-center text-gray-400"
-              >
+              <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
                 No users found. Add some below.
               </td>
             </tr>
