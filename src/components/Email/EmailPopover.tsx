@@ -21,7 +21,6 @@ export const EmailPopover: React.FC<EmailPopoverProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Type assertion needed for event.target
       const target = event.target as Node;
 
       if (

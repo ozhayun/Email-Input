@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { InviteUsersInput } from "@/components/InviteUsersInput";
-import { UserTable } from "@/components/UserTable";
+import { InviteUsersInput } from "@/components/Email";
+import { UserTable, TablePagination } from "@/components/Table";
 import { SettingsHeader } from "@/components/SettingsHeader";
 import { SubmittedUser, InitialUserRow } from "@/types/user";
 import { formatAddedOn } from "@/lib/format";
@@ -37,10 +37,13 @@ function getInitialUsers(): SubmittedUser[] {
   return INITIAL_USERS;
 }
 
+const PAGE_SIZE = 10;
+
 export function UserManagement() {
   const [activeTab, setActiveTab] = useState("Users");
   const [submittedUsers, setSubmittedUsers] =
     useState<SubmittedUser[]>(getInitialUsers);
+  const [tablePage, setTablePage] = useState(1);
 
   useEffect(() => {
     localStorage.setItem("submittedUsers", JSON.stringify(submittedUsers));
@@ -85,9 +88,10 @@ export function UserManagement() {
       <div className="bg-white rounded-xl shadow-sm border border-[#D6D8DD94] overflow-visible">
         <UserTable
           users={submittedUsers}
+          currentPage={tablePage}
+          pageSize={PAGE_SIZE}
           onRemove={handleRemoveUser}
           onRoleChange={handleRoleChange}
-          pageSize={10}
         />
 
         <div className="p-4 border-t border-[#D6D8DD94] border-b-0 rounded-b-xl">
@@ -99,6 +103,20 @@ export function UserManagement() {
           />
         </div>
       </div>
+
+      {submittedUsers.length > PAGE_SIZE && (
+        <TablePagination
+          currentPage={Math.min(tablePage, Math.ceil(submittedUsers.length / PAGE_SIZE))}
+          totalPages={Math.ceil(submittedUsers.length / PAGE_SIZE)}
+          totalCount={submittedUsers.length}
+          onPrevious={() => setTablePage((p) => Math.max(1, p - 1))}
+          onNext={() =>
+            setTablePage((p) =>
+              Math.min(Math.ceil(submittedUsers.length / PAGE_SIZE), p + 1)
+            )
+          }
+        />
+      )}
     </div>
   );
 }

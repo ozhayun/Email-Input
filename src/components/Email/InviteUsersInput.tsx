@@ -37,7 +37,6 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Notify parent of changes
   useEffect(() => {
     if (onChange) {
       const validEmails = emails.filter((e) => e.isValid).map((e) => e.email);
@@ -54,7 +53,6 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
 
     if (!trimmedEmail) return;
 
-    // Check for duplicates
     const isDuplicateInInput = emails.some((e) => e.email === trimmedEmail);
     const isAlreadyInvited = existingEmails.includes(trimmedEmail);
 
@@ -69,7 +67,6 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
       return;
     }
 
-    // Strict validation: Don't add if invalid
     if (!validateEmail(trimmedEmail)) {
       toast.error("Please enter a valid email address");
       setDuplicateAttempt(true);
@@ -101,7 +98,6 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
   };
 
   const handleSubmit = () => {
-    // Check pending input
     if (inputValue.trim()) {
       const email = inputValue.trim().toLowerCase();
 
@@ -109,18 +105,16 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
         toast.error("Please enter a valid email address");
         setDuplicateAttempt(true);
         setTimeout(() => setDuplicateAttempt(false), 500);
-        return; // Block submission if pending input is invalid
+        return;
       }
 
-      // Check if already invited globally
       if (existingEmails.includes(email)) {
         toast.error("User already invited");
         setDuplicateAttempt(true);
         setTimeout(() => setDuplicateAttempt(false), 500);
-        return; // Block submission
+        return;
       }
 
-      // If valid and not duplicate, add to list for submission
       if (!emails.some((e) => e.email === email)) {
         const finalEmails = [...emails, { email, isValid: true }];
         onSubmit(finalEmails.map((e) => e.email));
@@ -131,12 +125,10 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
         );
         return;
       } else {
-        // If duplicate, just clear input and proceed to submit existing emails
         setInputValue("");
       }
     }
 
-    // If no pending input or pending input was duplicate (and ignored)
     if (emails.length > 0) {
       onSubmit(emails.map((e) => e.email));
       setEmails([]);
