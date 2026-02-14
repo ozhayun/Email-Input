@@ -1,0 +1,15 @@
+[
+  "alice@example.com",
+  "bob.smith@company.org",
+  "charlie+tag@gmail.com",
+  "invalid-email",
+  "diana@test.co.uk",
+  "notanemail",
+  "eve@sub.domain.com",
+  "  frank@valid.com  ",
+  "missing-at-sign",
+  "grace@double.domain.co",
+  "henry@a.co",
+  "invalid..dots@example.com",
+  "ivy@valid-email.org"
+]
