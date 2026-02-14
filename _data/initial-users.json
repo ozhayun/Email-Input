@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@example.com",
+    "status": "Active",
+    "addedOn": "2024-01-15",
+    "role": "Admin",
+    "avatar": "SJ"
+  },
+  {
+    "id": "2",
+    "name": "Michael Chen",
+    "email": "michael.chen@example.com",
+    "status": "Active",
+    "addedOn": "2024-01-20",
+    "role": "Editor",
+    "avatar": "MC"
+  },
+  {
+    "id": "3",
+    "name": "Emma Williams",
+    "email": "emma.williams@example.com",
+    "status": "Inactive",
+    "addedOn": "2024-02-01",
+    "role": "Viewer",
+    "avatar": "EW"
+  },
+  {
+    "id": "4",
+    "name": "James Rodriguez",
+    "email": "james.rodriguez@example.com",
+    "status": "Active",
+    "addedOn": "2024-02-10",
+    "role": "Editor",
+    "avatar": "JR"
+  },
+  {
+    "id": "5",
+    "name": "Olivia Martinez",
+    "email": "olivia.martinez@example.com",
+    "status": "Pending",
+    "addedOn": "2024-02-12",
+    "role": "Viewer",
+    "avatar": "OM"
+  }
+]
