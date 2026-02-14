@@ -14,11 +14,11 @@ export function UserTable({ users, onRemove }: UserTableProps) {
       <table className="w-full">
         <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User Name</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Added On</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
+            <th className="px-6 py-3 text-start text-base font-medium text-[#2B303D]">User Name</th>
+            <th className="px-6 py-3 text-start text-base font-medium text-[#2B303D]">Email</th>
+            <th className="px-6 py-3 text-start text-base font-medium text-[#2B303D]">Status</th>
+            <th className="px-6 py-3 text-start text-base font-medium text-[#2B303D]">Added On</th>
+            <th className="px-6 py-3 text-start text-base font-medium text-[#2B303D]">Role</th>
             <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider"></th>
           </tr>
         </thead>
@@ -58,7 +58,7 @@ export function UserTable({ users, onRemove }: UserTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="relative">
                     <select 
-                      className="appearance-none bg-white border border-gray-200 text-gray-700 py-1 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm"
+                      className="appearance-none bg-white border border-gray-200 text-[#2B303D] py-1 pl-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm"
                       defaultValue={user.role}
                     >
                       <option>Admin</option>
@@ -66,7 +66,7 @@ export function UserTable({ users, onRemove }: UserTableProps) {
                       <option>Editor</option>
                       <option>Viewer</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-[#2B303D]">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
                   </div>

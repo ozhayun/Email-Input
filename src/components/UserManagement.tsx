@@ -24,7 +24,7 @@ const INITIAL_USERS: SubmittedUser[] = (initialUsersData as any[]).map((user, in
   status: user.status as any,
   addedOn: user.addedOn,
   role: user.role as any,
-  initials: user.avatar, // JSON has 'avatar' with initials
+  initials: user.avatar, 
   gradient: GRADIENTS[index % GRADIENTS.length]
 }));
 
@@ -114,10 +114,10 @@ export function UserManagement() {
         onRemoveAll={handleRemoveAll}
       />
       
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-visible">
+      <div className="bg-white rounded-xl shadow-sm border border-[#D6D8DD94] overflow-visible">
         <UserTable users={submittedUsers} onRemove={handleRemoveUser} />
         
-        <div className="p-4 border-t border-gray-100 bg-gray-50 border-b-0 rounded-b-xl">
+        <div className="p-4 border-t border-[#D6D8DD94] border-b-0 rounded-b-xl">
            <InviteUsersInput
               initialEmails={[]}
               onSubmit={handleSubmit}

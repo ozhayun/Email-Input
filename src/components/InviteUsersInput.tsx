@@ -150,93 +150,87 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Mail className="text-blue-600" size={24} />
-          <h2 className="text-xl font-semibold text-gray-800">Invite Users</h2>
-        </div>
-
-        <div className="mb-4">
-          <div className="flex items-start gap-4 w-full">
-            <div 
-              className={`
-                flex-1 flex flex-wrap items-center gap-2 p-2 min-h-[50px]
-                border rounded-lg bg-white
-                focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
-                transition-all duration-200 cursor-text
-                ${duplicateAttempt ? 'border-orange-400 bg-orange-50' : 'border-gray-200'}
-              `}
-              onClick={() => inputRef.current?.focus()}
-            >
-              {visibleEmails.map((emailData, index) => (
-                <EmailChip
-                  key={emailData.email}
-                  emailData={emailData}
-                  onRemove={removeEmail}
-                />
-              ))}
-
-              {hasHiddenEmails && (
-                <div className="relative">
-                  <button
-                    ref={moreButtonRef}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowPopover(!showPopover);
-                    }}
-                    className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium
-                      bg-gray-100 text-gray-600 hover:bg-gray-200
-                      transition-colors duration-200"
-                  >
-                    +{hiddenEmails.length}
-                  </button>
-
-                  {showPopover && (
-                    <div className="absolute bottom-full left-0 mb-2 w-64 z-50">
-                      <EmailPopover
-                        emails={hiddenEmails}
-                        onRemove={removeEmail}
-                        onClose={() => setShowPopover(false)}
-                        triggerRef={moreButtonRef}
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <input
-                ref={inputRef}
-                id="email-input"
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={emails.length === 0 ? "Enter emails..." : ""}
-                className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
-                aria-label="Email input field"
+      <div className="mb-4">
+        <div className="flex items-start gap-4 w-full">
+          <div 
+            className={`
+              flex-1 flex flex-wrap items-center gap-2 p-2 min-h-[40px]
+              border rounded-lg bg-white
+              focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500
+              transition-all duration-200 cursor-text
+              ${duplicateAttempt ? 'border-orange-400 bg-orange-50' : 'border-gray-200'}
+            `}
+            style={{ boxShadow: '0px 1px 2px 0px #1018280D' }}
+            onClick={() => inputRef.current?.focus()}
+          >
+            {visibleEmails.map((emailData, index) => (
+              <EmailChip
+                key={emailData.email}
+                emailData={emailData}
+                onRemove={removeEmail}
               />
-            </div>
+            ))}
 
-            <button
-              onClick={handleSubmit}
-              disabled={validEmailCount === 0}
-              className={`
-                px-6 py-3 rounded-lg font-medium text-sm whitespace-nowrap
-                transition-colors duration-200 h-[50px]
-                ${validEmailCount > 0
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                }
-              `}
-            >
-              Add Users ({validEmailCount})
-            </button>
+            {hasHiddenEmails && (
+              <div className="relative">
+                <button
+                  ref={moreButtonRef}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowPopover(!showPopover);
+                  }}
+                  className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium
+                    bg-gray-100 text-gray-600 hover:bg-gray-200
+                    transition-colors duration-200"
+                >
+                  +{hiddenEmails.length}
+                </button>
+
+                {showPopover && (
+                  <div className="absolute bottom-full left-0 mb-2 w-64 z-50">
+                    <EmailPopover
+                      emails={hiddenEmails}
+                      onRemove={removeEmail}
+                      onClose={() => setShowPopover(false)}
+                      triggerRef={moreButtonRef}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            <input
+              ref={inputRef}
+              id="email-input"
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={emails.length === 0 ? "Enter emails..." : ""}
+              className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400"
+              aria-label="Email input field"
+            />
           </div>
-          
-          <p className="mt-2 text-xs text-gray-400 ml-1">
-            Press <kbd className="font-sans">Enter</kbd> or <kbd className="font-sans">Space</kbd> to add
-          </p>
+
+          <button
+            onClick={handleSubmit}
+            disabled={validEmailCount === 0}
+            className={`
+              px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
+              transition-colors duration-200 h-[40px]
+              ${validEmailCount > 0
+                ? 'bg-[#1852E7] text-white hover:bg-blue-700 shadow-sm border border-[#336CFF]'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }
+            `}
+          >
+            Add Users ({validEmailCount})
+          </button>
         </div>
+        
+        <p className="mt-2 text-xs text-gray-400 ml-1">
+          Press <kbd className="font-sans">Enter</kbd> or <kbd className="font-sans">Space</kbd> to add
+        </p>
       </div>
     </div>
   );
@@ -257,7 +251,7 @@ const EmailChip: React.FC<EmailChipProps> = ({ emailData, onRemove }) => {
         inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md text-sm
         transition-colors duration-200
         ${isValid 
-          ? 'bg-gray-100 text-gray-700' 
+          ? 'bg-[#ECF1FC] text-gray-700' 
           : 'bg-red-50 text-red-700 border border-red-200'
         }
       `}
