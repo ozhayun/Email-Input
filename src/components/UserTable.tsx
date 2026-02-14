@@ -1,7 +1,8 @@
 'use client';
 
-import { SubmittedUser } from "@/types/user";
-import { Trash2 } from "lucide-react";
+import { SubmittedUser } from '@/types/user';
+import { formatAddedOn } from '@/lib/format';
+import { Trash2 } from 'lucide-react';
 
 interface UserTableProps {
   users: SubmittedUser[];
@@ -53,7 +54,7 @@ export function UserTable({ users, onRemove }: UserTableProps) {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {user.addedOn}
+                  {formatAddedOn(user.addedOn)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="relative">

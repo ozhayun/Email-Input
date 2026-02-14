@@ -219,10 +219,13 @@ export const InviteUsersInput: React.FC<InviteUsersInputProps> = ({
               px-6 py-1 rounded-lg font-medium text-sm whitespace-nowrap
               transition-colors duration-200 h-[40px]
               ${validEmailCount > 0
-                ? 'bg-[#1852E7] text-white hover:bg-blue-700 shadow-sm border border-[#336CFF]'
+                ? 'bg-[#1852E7] text-white hover:bg-blue-700 border border-[#336CFF]'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               }
             `}
+            style={validEmailCount > 0 ? {
+              boxShadow: '0px 1px 2px 0px #1018280D, 0px -2px 4px 0px #0638BA inset, 0px 2px 3.4px 0px #FBFBFB4D inset'
+            } : undefined}
           >
             Add Users ({validEmailCount})
           </button>
